@@ -1,5 +1,4 @@
 from PIL import Image 
-from IPython.display import display 
 import random
 import json
 
@@ -41,7 +40,7 @@ collar_weights = [20,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4]
 
 backpack = ["None","Gun","Jetpack","Rocket","SolDoge backpack"]
 backpack_file_names = ["none","futuristic gun","jetpack","rocket","soldoge backpack"]
-backpack_weights = [70,15,5,8,3]
+backpack_weights = [75,10,5,9,6]
 
 headwear = ["None","Astronaut","FTX hat","Cowboy","Jason X","Kitty","Predator","Radar dish","SolDoge","Solana","Steampunk","Tin foil","Top hat","TV"]
 headwear_file_names = ["none","astronaut helmet","ftx hat","howboy hat","jason x mask","kitty hat","predator mask","radar dish hat","sdoge hat","solana hat","steampunk hat","tin foil hat","top hat","tv head"]
@@ -202,6 +201,9 @@ for item in all_images:
     if item["EyeWear"]!="None":
         eyewear_img = Image.open(f'./trait-layers/eyewear/{eyewear_file_names[eyewear.index(item["EyeWear"])]}.png').convert('RGBA')
 
+    if item["Backpack"]!="None":
+        backpack_img = Image.open(f'./trait-layers/backpack/{backpack_file_names[backpack.index(item["Backpack"])]}.png').convert('RGBA')
+
     if item["Hair"]!="None":
         hair_img = Image.open(f'./trait-layers/hair/{hair_file_names[hair.index(item["Hair"])]}.png').convert('RGBA')
     
@@ -212,9 +214,6 @@ for item in all_images:
 
     if item["Collar"]!="None":
         collar_img = Image.open(f'./trait-layers/collar/{collar_file_names[collar.index(item["Collar"])]}.png').convert('RGBA')
-
-    if item["Backpack"]!="None":
-        backpack_img = Image.open(f'./trait-layers/backpack/{backpack_file_names[backpack.index(item["Backpack"])]}.png').convert('RGBA')
 
     if item["Headwear"]!="None":
         headwear_img = Image.open(f'./trait-layers/headwear/{headwear_file_names[headwear.index(item["Headwear"])]}.png').convert('RGBA')
