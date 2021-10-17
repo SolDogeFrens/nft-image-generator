@@ -70,10 +70,13 @@ def create_new_image():
     new_image ["Backpack"] = random.choices(backpack, background_weights)[0]
     new_image ["Headwear"] = random.choices(headwear, headwear_weights)[0]
 
-    if new_image["Hair"] not in ("None","Matrix dreads") or new_image["Eyes"]=="Laser":
+    if new_image["Hair"] not in ("None","Matrix dreads"):
         # can't have headwear
         new_image ["Headwear"] = "None"
 
+    if new_image["Eyes"]=="Laser":
+        # can't have eyewear
+        new_image ["EyeWear"] = "None"
     
     if new_image in all_images:
         return create_new_image()
@@ -98,7 +101,7 @@ all_unique = all_images_unique(all_images)
 print("Are all images unique?", all_unique)
 
 if not all_unique:
-    print("Not all images are unique.")
+    print("Error: Not all images are unique.")
     exit(1)
 
 
@@ -201,9 +204,6 @@ for item in all_images:
     if item["EyeWear"]!="None":
         eyewear_img = Image.open(f'./trait-layers/eyewear/{eyewear_file_names[eyewear.index(item["EyeWear"])]}.png').convert('RGBA')
 
-    if item["Backpack"]!="None":
-        backpack_img = Image.open(f'./trait-layers/backpack/{backpack_file_names[backpack.index(item["Backpack"])]}.png').convert('RGBA')
-
     if item["Hair"]!="None":
         hair_img = Image.open(f'./trait-layers/hair/{hair_file_names[hair.index(item["Hair"])]}.png').convert('RGBA')
     
@@ -218,13 +218,21 @@ for item in all_images:
     if item["Headwear"]!="None":
         headwear_img = Image.open(f'./trait-layers/headwear/{headwear_file_names[headwear.index(item["Headwear"])]}.png').convert('RGBA')
 
+    if item["Backpack"]!="None":
+        backpack_img = Image.open(f'./trait-layers/backpack/{backpack_file_names[backpack.index(item["Backpack"])]}.png').convert('RGBA')
+      
+
     #Create each composite
     com1 = Image.alpha_composite(bg, base_img)
-    com1 = Image.alpha_composite(com1, eyes_img)
 
     if item["Mouth"]!="Default":
         com1 = Image.alpha_composite(com1, mouth_img)
     
+    if item["Backpack"]!="None":
+        com1 = Image.alpha_composite(com1, backpack_img)
+
+    com1 = Image.alpha_composite(com1, eyes_img)
+
     if item["EyeWear"]!="None":
         com1 = Image.alpha_composite(com1, eyewear_img)
 
@@ -236,9 +244,6 @@ for item in all_images:
 
     if item["Collar"]!="None":
         com1 = Image.alpha_composite(com1, collar_img)
-
-    if item["Backpack"]!="None":
-        com1 = Image.alpha_composite(com1, backpack_img)
 
     if item["Headwear"]!="None":
         com1 = Image.alpha_composite(com1, headwear_img)
