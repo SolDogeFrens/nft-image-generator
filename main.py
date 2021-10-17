@@ -77,6 +77,10 @@ def create_new_image():
     if new_image["Eyes"]=="Laser":
         # can't have eyewear
         new_image ["EyeWear"] = "None"
+
+    if new_image["Headwear"]=="Astronaut":
+        # can't have collar
+        new_image["Collar"] = "None"
     
     if new_image in all_images:
         return create_new_image()
@@ -224,26 +228,26 @@ for item in all_images:
 
     #Create each composite
     com1 = Image.alpha_composite(bg, base_img)
-
-    if item["Mouth"]!="Default":
-        com1 = Image.alpha_composite(com1, mouth_img)
-    
+   
     if item["Backpack"]!="None":
         com1 = Image.alpha_composite(com1, backpack_img)
+
+    if item["Hair"]!="None":
+        com1 = Image.alpha_composite(com1, hair_img)
 
     com1 = Image.alpha_composite(com1, eyes_img)
 
     if item["EyeWear"]!="None":
         com1 = Image.alpha_composite(com1, eyewear_img)
 
-    if item["Hair"]!="None":
-        com1 = Image.alpha_composite(com1, hair_img)
-
     if item["Clothes"]!="None":
         com1 = Image.alpha_composite(com1, clothes_img)
 
     if item["Collar"]!="None":
         com1 = Image.alpha_composite(com1, collar_img)
+
+    if item["Mouth"]!="Default":
+        com1 = Image.alpha_composite(com1, mouth_img)
 
     if item["Headwear"]!="None":
         com1 = Image.alpha_composite(com1, headwear_img)
