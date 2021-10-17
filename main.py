@@ -48,7 +48,7 @@ headwear_weights = [50,4,4,4,4,4,4,4,4,4,4,4,4,4]
 
 ## Generate Traits
 
-TOTAL_IMAGES = 30 # Number of random unique images we want to generate
+TOTAL_IMAGES = 500 # Number of random unique images we want to generate
 
 all_images = [] 
 
@@ -79,8 +79,9 @@ def create_new_image():
         new_image ["EyeWear"] = "None"
 
     if new_image["Headwear"]=="Astronaut":
-        # can't have collar
+        # can't have collar or hair
         new_image["Collar"] = "None"
+        new_image["Hair"] = "None"
     
     if new_image in all_images:
         return create_new_image()
