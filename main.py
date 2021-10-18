@@ -42,13 +42,13 @@ backpack = ["None","Gun","Jetpack","Rocket","SolDoge backpack"]
 backpack_file_names = ["none","futuristic gun","jetpack","rocket","soldoge backpack"]
 backpack_weights = [75,10,5,9,6]
 
-headwear = ["None","Astronaut","FTX hat","Cowboy","Jason X","Kitty","Predator","Radar dish","SolDoge","Solana","Steampunk","Tin foil","Top hat","TV"]
-headwear_file_names = ["none","astronaut helmet","ftx hat","howboy hat","jason x mask","kitty hat","predator mask","radar dish hat","sdoge hat","solana hat","steampunk hat","tin foil hat","top hat","tv head"]
-headwear_weights = [50,4,4,4,4,4,4,4,4,4,4,4,4,4]
+headwear = ["None","Astronaut","FTX hat","Cowboy","Jason X","Kitty","Predator","Radar dish","SolDoge","Solana","Steampunk","Tin foil","Top hat","TV","Solana earphones","Cone of shame","SDoge helmet","Wizard"]
+headwear_file_names = ["none","astronaut helmet","ftx hat","howboy hat","jason x mask","kitty hat","predator mask","radar dish hat","sdoge hat","solana hat","steampunk hat","tin foil hat","top hat","tv head","big earphones","cone of shame","sdoge army helmet","wizard hat"]
+headwear_weights = [50,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4]
 
 ## Generate Traits
 
-TOTAL_IMAGES = 500 # Number of random unique images we want to generate
+TOTAL_IMAGES = 150 # Number of random unique images we want to generate
 
 all_images = [] 
 
@@ -221,7 +221,11 @@ for item in all_images:
         collar_img = Image.open(f'./trait-layers/collar/{collar_file_names[collar.index(item["Collar"])]}.png').convert('RGBA')
 
     if item["Headwear"]!="None":
-        headwear_img = Image.open(f'./trait-layers/headwear/{headwear_file_names[headwear.index(item["Headwear"])]}.png').convert('RGBA')
+        if item["Headwear"] in ("Solana earphones","Cone of shame","SDoge helmet","Wizard"):
+            headwear_fg_img = Image.open(f'./trait-layers/headwear foreground/{headwear_file_names[headwear.index(item["Headwear"])]}.png').convert('RGBA')
+            headwear_bg_img = Image.open(f'./trait-layers/headwear background/{headwear_file_names[headwear.index(item["Headwear"])]}.png').convert('RGBA')
+        else:
+            headwear_img = Image.open(f'./trait-layers/headwear/{headwear_file_names[headwear.index(item["Headwear"])]}.png').convert('RGBA')
 
     if item["Backpack"]!="None":
         backpack_img = Image.open(f'./trait-layers/backpack/{backpack_file_names[backpack.index(item["Backpack"])]}.png').convert('RGBA')
@@ -241,6 +245,9 @@ for item in all_images:
     if item["EyeWear"]!="None":
         com1 = Image.alpha_composite(com1, eyewear_img)
 
+    if item["Headwear"] in ("Solana earphones","Cone of shame","SDoge helmet","Wizard"):
+        com1 = Image.alpha_composite(com1, headwear_bg_img)
+
     if item["Clothes"]!="None":
         com1 = Image.alpha_composite(com1, clothes_img)
 
@@ -251,7 +258,10 @@ for item in all_images:
         com1 = Image.alpha_composite(com1, mouth_img)
 
     if item["Headwear"]!="None":
-        com1 = Image.alpha_composite(com1, headwear_img)
+        if item["Headwear"] in ("Solana earphones","Cone of shame","SDoge helmet","Wizard"):
+            com1 = Image.alpha_composite(com1, headwear_fg_img)
+        else:
+            com1 = Image.alpha_composite(com1, headwear_img)
 
     #Convert to RGB
     rgb_im = com1.convert('RGB')
@@ -266,7 +276,7 @@ data = json.load(f)
 
 
 IMAGES_BASE_URI = "ADD_IMAGES_BASE_URI_HERE"
-PROJECT_NAME = "ADD_PROJECT_NAME_HERE"
+PROJECT_NAME = "SolDoge"
 
 def getAttribute(key, value):
     return {
