@@ -20,7 +20,7 @@ eyes_weights = [15,13,7,10,10,3,5,5,3]
 
 mouth = ["Default","Blunt","Grills","Grin","Metal growl","Growl","Muzzle","Metal open","Open","Tongue"]
 mouth_file_names = ["default","blunt","grills","grinning","growl metal teeth","growl","muzzled","open mouth metal","open mouth","tongue out"]
-mouth_weights = [40,3,6,9,4,6,6,4,6,10]
+mouth_weights = [35,3,6,9,4,6,6,4,6,10]
 
 eyewear = ["None","Deal with it","Goggles","Monocle","Nerd","Nightvision","Ovals","Pit vipers","Soldoge","Startrek"]
 eyewear_file_names = ["none","deal with it","goggles","monocle","nerdy glasses","night vision","oval glasses","pit vipers","soldoge glasses","star trek"]
@@ -44,11 +44,12 @@ backpack_weights = [75,10,5,9,6]
 
 headwear = ["None","Astronaut","FTX hat","Cowboy","Jason X","Kitty","Predator","Radar dish","SolDoge","Solana","Steampunk","Tin foil","Top hat","TV","Solana earphones","Cone of shame","SDoge helmet","Wizard"]
 headwear_file_names = ["none","astronaut helmet","ftx hat","howboy hat","jason x mask","kitty hat","predator mask","radar dish hat","sdoge hat","solana hat","steampunk hat","tin foil hat","top hat","tv head","big earphones","cone of shame","sdoge army helmet","wizard hat"]
-headwear_weights = [50,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4]
+headwear_weights = [40,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4]
+headwear_weights_subset = [25,0,4,4,0,4,0,4,4,4,4,4,4,0,4,4,4,4]
 
 ## Generate Traits
 
-TOTAL_IMAGES = 150 # Number of random unique images we want to generate
+TOTAL_IMAGES = 100 # Number of random unique images we want to generate
 
 all_images = [] 
 
@@ -63,12 +64,24 @@ def create_new_image():
     new_image ["Base"] = random.choices(base, base_weights)[0]
     new_image ["Eyes"] = random.choices(eyes, eyes_weights)[0]
     new_image ["Mouth"] = random.choices(mouth, mouth_weights)[0]
-    new_image ["EyeWear"] = random.choices(eyewear, eyewear_weights)[0]
-    new_image ["Hair"] = random.choices(hair, hair_weights)[0]
+
+    if new_image["Mouth"]=="Muzzle":
+        new_image["EyeWear"] = "None"
+    else:
+        new_image ["EyeWear"] = random.choices(eyewear, eyewear_weights)[0]
+
+    if new_image["Base"] in ("Cyborg","Steampunk"):
+        new_image["Hair"] = "None"
+    else:
+        new_image ["Hair"] = random.choices(hair, hair_weights)[0]
+
     new_image ["Clothes"] = random.choices(clothes, clothes_weights)[0]
     new_image ["Collar"] = random.choices(collar, collar_weights)[0]
     new_image ["Backpack"] = random.choices(backpack, background_weights)[0]
-    new_image ["Headwear"] = random.choices(headwear, headwear_weights)[0]
+    if new_image["Mouth"] in ("Blunt","Tongue") or new_image["EyeWear"]!="None":
+        new_image["Headwear"] = random.choices(headwear, headwear_weights_subset)[0]
+    else:
+        new_image["Headwear"] = random.choices(headwear, headwear_weights)[0]
 
     if new_image["Hair"] not in ("None","Matrix dreads"):
         # can't have headwear
@@ -240,22 +253,26 @@ for item in all_images:
     if item["Hair"]!="None":
         com1 = Image.alpha_composite(com1, hair_img)
 
-    com1 = Image.alpha_composite(com1, eyes_img)
-
-    if item["EyeWear"]!="None":
-        com1 = Image.alpha_composite(com1, eyewear_img)
-
-    if item["Headwear"] in ("Solana earphones","Cone of shame","SDoge helmet","Wizard"):
-        com1 = Image.alpha_composite(com1, headwear_bg_img)
-
     if item["Clothes"]!="None":
         com1 = Image.alpha_composite(com1, clothes_img)
 
     if item["Collar"]!="None":
         com1 = Image.alpha_composite(com1, collar_img)
 
+    if item["Headwear"] in ("Solana earphones","Cone of shame","SDoge helmet","Wizard"):
+        com1 = Image.alpha_composite(com1, headwear_bg_img)
+
+    if item["Eyes"]!="Laser":
+        com1 = Image.alpha_composite(com1, eyes_img)
+
     if item["Mouth"]!="Default":
         com1 = Image.alpha_composite(com1, mouth_img)
+
+    if item["EyeWear"]!="None":
+        com1 = Image.alpha_composite(com1, eyewear_img)
+
+    if item["Eyes"]=="Laser":
+        com1 = Image.alpha_composite(com1, eyes_img)
 
     if item["Headwear"]!="None":
         if item["Headwear"] in ("Solana earphones","Cone of shame","SDoge helmet","Wizard"):
